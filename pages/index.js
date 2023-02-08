@@ -5,6 +5,7 @@ import { useState } from 'react';
 
 const Home = () => {
   const [userInput, setUserInput] = useState('');
+  const [apiKeyInput, setAPIKeyInput] = useState('');
   const [apiOutput, setApiOutput] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -16,7 +17,7 @@ const Home = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ userInput }),
+      body: JSON.stringify({ apiKeyInput, userInput }),
     });
 
     const data = await response.json();
@@ -25,8 +26,11 @@ const Home = () => {
     setApiOutput(`${output.text}`);
     setIsGenerating(false);
   };
-  const onUserChangedText = (e) => {
+  const onPromptChangedText = (e) => {
     setUserInput(e.target.value);
+  };
+  const onAPIKeyChangedText = (e) => {
+    setAPIKeyInput(e.target.value);
   };
   return (
     <div className="root">
@@ -42,13 +46,23 @@ const Home = () => {
             <h2>Ask VB anything about the Ethereum network, Solidity, smart contracts, and the future of Web3.</h2>
           </div>
         </div>
-        <div className="prompt-container">
-          <textarea
-            className="prompt-box"
-            placeholder="What would you like to ask VB?"
-            value={userInput}
-            onChange={onUserChangedText}
-          />;
+        <div className="container body-container">
+          <div className="field-container">
+            <input
+              className="field-box api-key-box"
+              placeholder="OPENAI_API_KEY"
+              value={apiKeyInput}
+              onChange={onAPIKeyChangedText}
+            />;
+          </div>
+          <div className="field-container">
+            <textarea
+              className="field-box"
+              placeholder="What would you like to ask VB?"
+              value={userInput}
+              onChange={onPromptChangedText}
+            />;
+          </div>
         </div>
         <div className="prompt-buttons">
           <a
